@@ -1,0 +1,25 @@
+@import '../../styles/variables';
+@import '../../styles/mixins';
+
+.home-container {
+  @include flex-center;
+  height: 100vh;
+  flex-direction: column;
+  gap: $spacing-lg;
+
+  h1 {
+    color: $primary-color;
+  }
+
+  .chat-link {
+    padding: $spacing-md $spacing-lg;
+    background-color: $primary-color;
+    color: white;
+    border-radius: $border-radius-lg;
+    text-decoration: none;
+    
+    &:hover {
+      background-color: darken($primary-color, 5%);
+    }
+  }
+} 
