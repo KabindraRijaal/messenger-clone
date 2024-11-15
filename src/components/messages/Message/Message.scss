@@ -1,0 +1,30 @@
+@import '../../../styles/variables';
+@import '../../../styles/mixins';
+
+.message {
+  max-width: 70%;
+  margin: $spacing-xs 0;
+  padding: $spacing-sm $spacing-md;
+  border-radius: $border-radius-md;
+  
+  &.incoming {
+    background-color: $secondary-color;
+    align-self: flex-start;
+  }
+  
+  &.outgoing {
+    background-color: $primary-color;
+    color: white;
+    align-self: flex-end;
+  }
+
+  .message-content {
+    word-wrap: break-word;
+  }
+
+  .message-timestamp {
+    font-size: 0.75rem;
+    opacity: 0.7;
+    margin-top: 0.25rem;
+  }
+} 
