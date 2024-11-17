@@ -1,41 +1,66 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchMessages } from '../../../features/messages/messagesSlice';
-import { RootState } from '../../../store';
+import { RootState, AppDispatch } from '../../../store';
 import Message from '../Message/Message';
+import ScrollToBottom from '../../common/ScrollToBottom/ScrollToBottom';
 import './MessageList.scss';
 
 const MessageList = () => {
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppDispatch>();
     const { messages, loading, page, totalPages } = useSelector((state: RootState) => state.messages);
     const listRef = useRef<HTMLDivElement>(null);
-  
+    const [isFetching, setIsFetching] = useState(false);
+    const prevScrollHeightRef = useRef<number>(0);
+    const lastMessageRef = useRef<number>(0);
+
     useEffect(() => {
       dispatch(fetchMessages(1));
     }, [dispatch]);
 
-    // Scroll to bottom when new message is added
-    useEffect(() => {
-      if (messages.length > 0) {
-        const lastMessage = messages[messages.length - 1];
-        if (lastMessage.isOutgoing) {
-          listRef.current?.scrollTo({
-            top: listRef.current.scrollHeight,
-            behavior: 'smooth'
-          });
+    const handleScroll = async (e: React.UIEvent<HTMLDivElement>) => {
+      const { scrollTop } = e.currentTarget;
+
+      // Load more when scrolling to top
+      if (scrollTop === 0 && !loading && !isFetching && page < totalPages) {
+        setIsFetching(true);
+        prevScrollHeightRef.current = listRef.current?.scrollHeight || 0;
+        
+        try {
+          await dispatch(fetchMessages(page + 1));
+        } finally {
+          setIsFetching(false);
+          
+          // Maintain scroll position after loading new messages
+          if (listRef.current) {
+            const newScrollHeight = listRef.current.scrollHeight;
+            const scrollDiff = newScrollHeight - prevScrollHeightRef.current;
+            listRef.current.scrollTop = scrollDiff;
+          }
         }
       }
-    }, [messages]);
-  
-    const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
-      const { scrollTop } = e.currentTarget;
-      
-      // Load more when scrolling to top
-      if (scrollTop === 0 && !loading && page < totalPages) {
-        dispatch(fetchMessages(page + 1));
+    };
+
+    const scrollToBottom = () => {
+      if (listRef.current) {
+        listRef.current.scrollTo({
+          top: listRef.current.scrollHeight,
+          behavior: 'smooth'
+        });
       }
     };
-  
+
+    // Scroll to bottom only for new messages sent by the user
+    useEffect(() => {
+      if (messages.length > lastMessageRef.current) {
+        const lastMessage = messages[messages.length - 1];
+        if (lastMessage.isOutgoing) {
+          scrollToBottom();
+        }
+        lastMessageRef.current = messages.length;
+      }
+    }, [messages]);
+
     return (
       <div className="messages-container">
         <div 
@@ -53,6 +78,7 @@ const MessageList = () => {
             />
           ))}
         </div>
+        <ScrollToBottom onClick={scrollToBottom} />
       </div>
     );
 };

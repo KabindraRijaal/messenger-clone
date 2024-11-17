@@ -18,8 +18,6 @@ interface Message {
     error: string | null;
   }
   
-  let messageIdCounter = 0;
-  
   const initialState: MessagesState = {
     messages: [],
     page: 1,
@@ -46,10 +44,7 @@ interface Message {
     initialState,
     reducers: {
       addMessage: (state, action) => {
-        state.messages.push({
-          ...action.payload,
-          id: messageIdCounter++
-        });
+        state.messages.push(action.payload);
       },
     },
     extraReducers: (builder) => {

@@ -3,10 +3,11 @@ import { useDispatch } from "react-redux";
 import "./MessageInput.scss";
 import { addMessage } from "../../../features/messages/messagesSlice";
 import MessageList from "../MessageList/MessageList";
+import { AppDispatch } from "../../../store";
 
 const MessageInput = () => {
   const [message, setMessage] = useState("");
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
