@@ -4,34 +4,48 @@
 .message-container {
   display: flex;
   flex-direction: column;
-  height:90vh;
+  height: 100%;
+  background-color: $white;
+  
   .message-input-container {
     padding: $spacing-md;
     border-top: 1px solid $light-gray;
     display: flex;
     gap: $spacing-md;
-    background-color: white;
+    background-color: $white;
     width: 100%;
+    min-height: $input-height;
+    align-items: center;
 
     input {
       flex: 1;
-      padding: $spacing-sm;
+      padding: $spacing-sm $spacing-md;
       border: 1px solid $light-gray;
       border-radius: $border-radius-lg;
       outline: none;
+      font-size: 0.9375rem;
+      background-color: $secondary-color;
+      transition: background-color 0.2s;
 
       &:focus {
-        border-color: $primary-color;
+        background-color: $white;
+        border-color: $light-gray;
+      }
+
+      &::placeholder {
+        color: #65676B;
       }
     }
 
     button {
       padding: $spacing-sm $spacing-lg;
       background-color: $primary-color;
-      color: white;
+      color: $white;
       border: none;
       border-radius: $border-radius-lg;
       cursor: pointer;
+      font-weight: 600;
+      transition: background-color 0.2s;
 
       &:hover {
         background-color: darken($primary-color, 5%);

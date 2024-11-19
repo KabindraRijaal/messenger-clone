@@ -61,6 +61,90 @@ const MessageList = () => {
       }
     }, [messages]);
 
+    useEffect(() => {
+        const messagesList = listRef.current;
+        if (!messagesList) return;
+
+        const updateGradients = () => {
+            const visibleMessages = Array.from(messagesList.querySelectorAll('.message.outgoing'))
+                .filter(element => {
+                    const rect = element.getBoundingClientRect();
+                    const containerRect = messagesList.getBoundingClientRect();
+                    return rect.top >= containerRect.top && rect.bottom <= containerRect.bottom;
+                });
+
+            if (visibleMessages.length === 0) return;
+
+            const totalVisible = visibleMessages.length;
+            
+            visibleMessages.forEach((msg, index) => {
+                const progress = index / (totalVisible - 1);
+                
+                // Purple to Blue gradient values (adjusted for better visibility)
+                const startColor = { r: 160, g: 51, b: 255 };   // #A033FF (Purple)
+                const midColor = { r: 14, g: 142, b: 255 };     // #0E8EFF (Mid Blue)
+                const endColor = { r: 0, g: 176, b: 255 };      // #00B0FF (Light Blue)
+                
+                let r, g, b;
+                
+                if (progress < 0.5) {
+                    // First half: Purple to Mid Blue
+                    const p = progress * 2;
+                    r = Math.round(startColor.r + (midColor.r - startColor.r) * p);
+                    g = Math.round(startColor.g + (midColor.g - startColor.g) * p);
+                    b = Math.round(startColor.b + (midColor.b - startColor.b) * p);
+                } else {
+                    // Second half: Mid Blue to Light Blue
+                    const p = (progress - 0.5) * 2;
+                    r = Math.round(midColor.r + (endColor.r - midColor.r) * p);
+                    g = Math.round(midColor.g + (endColor.g - midColor.g) * p);
+                    b = Math.round(midColor.b + (endColor.b - midColor.b) * p);
+                }
+                
+                (msg as HTMLElement).style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
+            });
+
+            // Reset color for non-visible messages
+            const allOutgoingMessages = messagesList.querySelectorAll('.message.outgoing');
+            allOutgoingMessages.forEach(msg => {
+                if (!visibleMessages.includes(msg)) {
+                    (msg as HTMLElement).style.backgroundColor = '';
+                }
+            });
+        };
+
+        // Update on scroll
+        const handleScroll = () => {
+            requestAnimationFrame(updateGradients);
+        };
+
+        messagesList.addEventListener('scroll', handleScroll);
+        
+        // Initial update and update on changes
+        const observer = new IntersectionObserver(
+            (entries) => {
+                if (entries.some(entry => entry.isIntersecting)) {
+                    requestAnimationFrame(updateGradients);
+                }
+            },
+            {
+                root: messagesList,
+                threshold: [0, 0.5, 1]
+            }
+        );
+
+        const messages = messagesList.querySelectorAll('.message.outgoing');
+        messages.forEach(msg => observer.observe(msg));
+
+        // Initial update
+        updateGradients();
+
+        return () => {
+            observer.disconnect();
+            messagesList.removeEventListener('scroll', handleScroll);
+        };
+    }, [messages]);
+
     return (
       <div className="messages-container">
         <div 

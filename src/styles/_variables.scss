@@ -1,19 +1,29 @@
 // Colors
-$primary-color: #0084ff;
-$secondary-color: #f0f0f0;
-$text-color: #333;
-$light-gray: #e0e0e0;
+$primary-color: #0099FF;  // Messenger blue
+$secondary-color: #F0F2F5; // Light gray background
+$text-color: #050505;     // Dark text
+$light-gray: #E4E6EB;     // Border color
+$hover-color: #F2F2F2;    // Hover state
+$message-bg: #E4E6EB;     // Incoming message background
+$white: #FFFFFF;
+$gradient-start: #A033FF;  // Purple (top)
+$gradient-middle: #0E8EFF; // Mid blue
+$gradient-end: #00B0FF;    // Light blue (bottom)
 
 // Spacing
-$spacing-xs: 0.5rem;
-$spacing-sm: 0.8rem;
+$spacing-xs: 0.25rem;
+$spacing-sm: 0.5rem;
 $spacing-md: 1rem;
 $spacing-lg: 1.5rem;
 
 // Border radius
 $border-radius-sm: 0.5rem;
-$border-radius-md: 1rem;
-$border-radius-lg: 1.5rem;
+$border-radius-md: 1.125rem;  // Message bubbles
+$border-radius-lg: 1.25rem;   // Input field
+
+// Chat dimensions
+$input-height: 44px;
+$header-height: 60px;
 
 // Breakpoints
 $mobile: 576px;

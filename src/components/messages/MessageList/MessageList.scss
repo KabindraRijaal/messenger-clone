@@ -1,21 +1,40 @@
-@use '../../../styles/index' as *;
+@use '../../../styles/variables' as *;
 
 .messages-container {
-  height: 100%;
+  position: relative;
+  flex: 1;
+  min-height: 0;
   display: flex;
   flex-direction: column;
+  background-color: $white;
 }
 
 .messages-list {
   flex: 1;
   overflow-y: auto;
-  padding: $spacing-md;
+  padding: $spacing-md $spacing-lg;
   display: flex;
   flex-direction: column;
+  gap: $spacing-xs;
+  min-height: 0;
+
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+  }
 
   .loading {
     text-align: center;
     padding: $spacing-md;
     color: $text-color;
+    font-size: 0.875rem;
   }
 }

@@ -5,7 +5,7 @@ import Home from '../pages/Home/Home';
 const AppRoutes = () => {
   return (
     <Routes>
-      <Route path="/home" element={<Home />} />
+      <Route path="/" element={<Home />} />
       <Route path="/chat" element={<Chat />} />
     </Routes>
   );
