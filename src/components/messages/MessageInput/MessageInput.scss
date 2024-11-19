@@ -1,5 +1,6 @@
-@import "../../../styles/variables";
-@import "../../../styles/mixins";
+@use "../../../styles/variables" as *;
+@use "../../../styles/mixins" as *;
+@use "sass:color";
 
 .message-container {
   display: flex;
@@ -35,6 +36,11 @@
       &::placeholder {
         color: #65676B;
       }
+
+      &:disabled {
+        background-color: color.adjust($secondary-color, $lightness: 5%);
+        cursor: not-allowed;
+      }
     }
 
     button {
@@ -48,7 +54,21 @@
       transition: background-color 0.2s;
 
       &:hover {
-        background-color: darken($primary-color, 5%);
+        background-color: color.adjust($primary-color, $lightness: -5%);
+      }
+
+      &:disabled {
+        background-color: color.adjust($primary-color, $lightness: 15%);
+        cursor: not-allowed;
+      }
+
+      .loading-spinner {
+        margin: 0 $spacing-sm;
+        
+        .spinner {
+          border-color: rgba($white, 0.2);
+          border-top-color: $white;
+        }
       }
     }
   }

@@ -4,6 +4,7 @@ import { fetchMessages } from '../../../features/messages/messagesSlice';
 import { RootState, AppDispatch } from '../../../store';
 import Message from '../Message/Message';
 import ScrollToBottom from '../../common/ScrollToBottom/ScrollToBottom';
+import Loading from '../../common/Loading/Loading';
 import './MessageList.scss';
 
 const MessageList = () => {
@@ -152,7 +153,11 @@ const MessageList = () => {
           className="messages-list" 
           onScroll={handleScroll}
         >
-          {loading && <div className="loading">Loading...</div>}
+          {loading && (
+            <div className="loading">
+              <Loading size="large" />
+            </div>
+          )}
           {messages.map((message) => (
             <Message
               key={`${message.id}-${message.timestamp}`}

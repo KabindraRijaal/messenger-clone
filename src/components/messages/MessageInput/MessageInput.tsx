@@ -4,14 +4,17 @@ import "./MessageInput.scss";
 import { addMessage } from "../../../features/messages/messagesSlice";
 import MessageList from "../MessageList/MessageList";
 import { AppDispatch } from "../../../store";
+import Loading from '../../common/Loading/Loading';
 
 const MessageInput = () => {
   const [message, setMessage] = useState("");
   const dispatch = useDispatch<AppDispatch>();
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (message.trim()) {
+      setLoading(true);
       dispatch(
         addMessage({
           id: Date.now(),
@@ -23,6 +26,7 @@ const MessageInput = () => {
         })
       );
       setMessage("");
+      setLoading(false);
     }
   };
 
@@ -35,8 +39,11 @@ const MessageInput = () => {
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           placeholder="Type a message..."
+          disabled={loading}
         />
-        <button type="submit">Send</button>
+        <button type="submit" disabled={loading}>
+          {loading ? <Loading size="small" /> : 'Send'}
+        </button>
       </form>
     </div>
   );
